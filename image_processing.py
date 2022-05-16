@@ -51,8 +51,6 @@ def qr_analyzer(event, context):
     return None
 
 
-
-
 def getconnection():
     """Attempts to get a connection to our database.
     Arguments:
@@ -60,7 +58,8 @@ def getconnection():
     Returns:
         The connection to the database if successful
     """
-    unix_socket = "/cloudsql/{}".format("unfold-usf:us-central1:postgres-instance-usf")
+    unix_socket = "/cloudsql/{}"\
+        .format("unfold-usf:us-central1:postgres-instance-usf")
     dbpass = os.environ.get("dbpassword")
 
     conn = psycopg2.connect(
@@ -85,7 +84,8 @@ def checkid(plotid):
     try:
         conn = getconnection()
         cursor = conn.cursor()
-        cursor.execute("PREPARE select_statement as SELECT * FROM plots where id = $1")
+        cursor.execute("PREPARE select_statement as "
+                       "SELECT * FROM plots where id = $1")
         cursor.execute("EXECUTE select_statement (%s)", (plotid,))
 
         if cursor.fetchone() is not None:
@@ -151,8 +151,10 @@ def insertimage(plotid, url):
 
 
 def storage_add_fetch(data, event, context):
-    """Triggered from a message on a Cloud Pub/Sub topic 'Camera_rig'. Adds image from encoded dictionary in event
-        dictionary data to Google Cloud Storage and returns a URL that references that image.
+    """Triggered from a message on a Cloud Pub/Sub topic 'Camera_rig'.
+        Adds image from encoded dictionary in event
+        dictionary data to Google Cloud Storage
+        and returns a URL that references that image.
     Args:
         event (dict): Event payload.
         context (google.cloud.functions.Context): Metadata for the event.
@@ -173,7 +175,6 @@ def storage_add_fetch(data, event, context):
     # Finally, a url is generated for the bucket. The expire_tuple
     # is a tuple representing the time the url life expires
     urlFilename = urlencode.quote_plus(event["filename"])
-    url = "/".join(
-        ["https://storage.cloud.google.com", event["bucket"], urlFilename]
-    )
+    url = "/".join(["https://storage.cloud.google.com",
+                    event["bucket"], urlFilename])
     return url
