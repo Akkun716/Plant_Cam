@@ -89,7 +89,6 @@ def checkid(plotid):
         cursor.execute("EXECUTE select_statement (%s)", (plotid,))
 
         if cursor.fetchone() is not None:
-            print("in cursor fetchone print")
             return True
         else:
             return False
