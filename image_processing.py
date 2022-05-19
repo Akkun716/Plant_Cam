@@ -88,6 +88,7 @@ def checkid(plotid):
                        "SELECT * FROM plots where id = $1")
         cursor.execute("EXECUTE select_statement (%s)", (plotid,))
 
+        # If select statement returns nothing
         if cursor.fetchone() is not None:
             return True
         else:
@@ -98,6 +99,7 @@ def checkid(plotid):
 
     finally:
         if conn:
+            # Close the connection
             cursor.close()
             conn.close()
             print("Connection to database closed")
@@ -124,6 +126,7 @@ def insertimage(plotid, url):
         count = countrow[0]
         imageid = count + 1
 
+        # Insert image into images table
         cursor.execute(
             """INSERT INTO images(id, plot_id, image_handle)
                VALUES (%(id)s, %(plot_id)s, %(image_handle)s);""",
@@ -144,6 +147,7 @@ def insertimage(plotid, url):
 
     finally:
         if conn:
+            # Close the connection
             cursor.close()
             conn.close()
             print("Connection to database closed")
